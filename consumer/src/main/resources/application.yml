@@ -1,0 +1,46 @@
+spring:
+  profiles:
+    active: local
+server:
+  port: 8090
+
+---
+spring:
+  profiles: local
+  kafka:
+    template:
+      default-topic: library-events
+    consumer:
+      bootstrap-servers: localhost:9092
+      key-deserializer: org.apache.kafka.common.serialization.LongDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      group-id: library-listener-group
+    producer:
+      bootstrap-servers:
+        -   localhost:9101
+      key-serializer: org.apache.kafka.common.serialization.LongSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+  jpa:
+    database: h2
+    database-platform: org.hibernate.dialect.H2Dialect
+    generate-ddl: true
+  h2:
+    console:
+      enabled: true
+
+---
+
+spring:
+  profiles: dev
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9092
+      key-deserializer: org.apache.kafka.common.serialization.LongDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      group-id: library-listener-group
+
+
+
